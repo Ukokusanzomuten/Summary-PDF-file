@@ -15,6 +15,7 @@ def divide_sentences(text):
 def taigendome(text_list):
     # 名詞以外の単語を入れるための空のリスト
     not_noun_list = []
+    taigen_text = [] # 体言止めしたtextを格納する場所
     # リストごとに形態素解析
     for sentence in text_list:
         parse = MeCab.Tagger().parse(sentence)
@@ -34,11 +35,13 @@ def taigendome(text_list):
                 end_noun_sentence = sentence.replace(f"{del_sentence}","")
                 # not_noun_listの初期化(次の文の体言止め処理でも利用するため)
                 not_noun_list = []
+                taigen_text.append(end_noun_sentence)
                 print(end_noun_sentence)
                 break
             # 名詞以外の単語を抽出しリストに格納
             not_noun = items.pop(-1)
             not_noun_list.insert(0,not_noun[0])
+    return "\n".join(taigen_text) #taigen_textはリストなのでここで合算して1つの文字列を出力してtxtファイルに保存する下準備
 
 if __name__ == "__main__":
     test = "これはテストです。末尾の単語を消去して、体言止めの文章を生成できます。"
